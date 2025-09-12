@@ -5,15 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Car, Shield } from "lucide-react";
+import { Car, Shield, ArrowLeft } from "lucide-react";
 
 export default function AuthPage() {
-  const { user, loginMutation, registerMutation } = useAuth();
+  const { user, loginMutation } = useAuth();
   const [, setLocation] = useLocation();
   
   const [loginData, setLoginData] = useState({ username: "", password: "" });
-  const [registerData, setRegisterData] = useState({ username: "", password: "" });
 
   // Handle navigation after login
   useEffect(() => {
@@ -29,16 +27,22 @@ export default function AuthPage() {
     loginMutation.mutate(loginData);
   };
 
-  const handleRegister = (e: React.FormEvent) => {
-    e.preventDefault();
-    registerMutation.mutate(registerData);
-  };
-
   return (
     <div className="min-h-screen bg-background flex">
       {/* Left side - Forms */}
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-md">
+          <div className="mb-6">
+            <Button 
+              variant="ghost" 
+              onClick={() => setLocation("/")}
+              className="flex items-center space-x-2 text-muted-foreground hover:text-foreground"
+            >
+              <ArrowLeft size={20} />
+              <span>Zurück zur Startseite</span>
+            </Button>
+          </div>
+          
           <div className="text-center mb-8">
             <div className="flex items-center justify-center space-x-2 mb-4">
               <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
@@ -49,98 +53,55 @@ export default function AuthPage() {
             </div>
             <h1 className="text-2xl font-bold text-foreground">Admin-Zugang</h1>
             <p className="text-muted-foreground">Melden Sie sich an, um das Admin-Panel zu verwenden</p>
+            <div className="mt-4 p-4 bg-muted rounded-lg text-sm text-muted-foreground">
+              <p className="font-medium mb-2">So melden Sie sich an:</p>
+              <p>1. Verwenden Sie Ihren Admin-Benutzernamen</p>
+              <p>2. Geben Sie Ihr Passwort ein</p>
+              <p>3. Nach erfolgreicher Anmeldung werden Sie zum Admin-Panel weitergeleitet</p>
+            </div>
           </div>
 
-          <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login" data-testid="tab-login">Anmelden</TabsTrigger>
-              <TabsTrigger value="register" data-testid="tab-register">Registrieren</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="login">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Anmelden</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={handleLogin} className="space-y-4">
-                    <div>
-                      <Label htmlFor="login-username">Benutzername</Label>
-                      <Input
-                        id="login-username"
-                        type="text"
-                        value={loginData.username}
-                        onChange={(e) => setLoginData({ ...loginData, username: e.target.value })}
-                        required
-                        data-testid="input-login-username"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="login-password">Passwort</Label>
-                      <Input
-                        id="login-password"
-                        type="password"
-                        value={loginData.password}
-                        onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-                        required
-                        data-testid="input-login-password"
-                      />
-                    </div>
-                    <Button
-                      type="submit"
-                      className="w-full"
-                      disabled={loginMutation.isPending}
-                      data-testid="button-login"
-                    >
-                      {loginMutation.isPending ? "Wird angemeldet..." : "Anmelden"}
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
-            </TabsContent>
-            
-            <TabsContent value="register">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Registrieren</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={handleRegister} className="space-y-4">
-                    <div>
-                      <Label htmlFor="register-username">Benutzername</Label>
-                      <Input
-                        id="register-username"
-                        type="text"
-                        value={registerData.username}
-                        onChange={(e) => setRegisterData({ ...registerData, username: e.target.value })}
-                        required
-                        data-testid="input-register-username"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="register-password">Passwort</Label>
-                      <Input
-                        id="register-password"
-                        type="password"
-                        value={registerData.password}
-                        onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
-                        required
-                        data-testid="input-register-password"
-                      />
-                    </div>
-                    <Button
-                      type="submit"
-                      className="w-full"
-                      disabled={registerMutation.isPending}
-                      data-testid="button-register"
-                    >
-                      {registerMutation.isPending ? "Wird registriert..." : "Registrieren"}
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
+          <Card>
+            <CardHeader>
+              <CardTitle>Anmelden</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleLogin} className="space-y-4">
+                <div>
+                  <Label htmlFor="login-username">Benutzername</Label>
+                  <Input
+                    id="login-username"
+                    type="text"
+                    value={loginData.username}
+                    onChange={(e) => setLoginData({ ...loginData, username: e.target.value })}
+                    required
+                    data-testid="input-login-username"
+                    placeholder="Ihr Admin-Benutzername"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="login-password">Passwort</Label>
+                  <Input
+                    id="login-password"
+                    type="password"
+                    value={loginData.password}
+                    onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                    required
+                    data-testid="input-login-password"
+                    placeholder="Ihr Passwort"
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={loginMutation.isPending}
+                  data-testid="button-login"
+                >
+                  {loginMutation.isPending ? "Wird angemeldet..." : "Anmelden"}
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
         </div>
       </div>
 

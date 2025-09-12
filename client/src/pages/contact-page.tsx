@@ -59,7 +59,96 @@ export default function ContactPage() {
           </div>
         </section>
 
-        <ContactSection />
+        {/* Contact Form Section */}
+        <section className="py-20">
+          <div className="container mx-auto px-6">
+            <div className="max-w-2xl mx-auto">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl font-bold text-foreground mb-4">Senden Sie uns eine Nachricht</h2>
+                <p className="text-lg text-muted-foreground">
+                  Füllen Sie das Formular aus und wir melden uns schnellstmöglich bei Ihnen
+                </p>
+              </div>
+              <div className="bg-card p-8 rounded-xl border">
+                <form className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Vorname *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-background"
+                        placeholder="Ihr Vorname"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Nachname *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-background"
+                        placeholder="Ihr Nachname"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      E-Mail *
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-background"
+                      placeholder="ihre.email@beispiel.com"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      Telefon
+                    </label>
+                    <input
+                      type="tel"
+                      className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-background"
+                      placeholder="+41 XX XXX XX XX"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      Betreff *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-background"
+                      placeholder="Worum geht es?"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      Nachricht *
+                    </label>
+                    <textarea
+                      rows={6}
+                      required
+                      className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-background resize-none"
+                      placeholder="Ihre Nachricht..."
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full bg-primary text-primary-foreground py-3 rounded-lg hover:bg-primary/90 transition-colors font-semibold"
+                  >
+                    Nachricht senden
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* Map Section */}
         <section className="py-20 bg-muted">

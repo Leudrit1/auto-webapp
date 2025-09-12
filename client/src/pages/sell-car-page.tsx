@@ -87,7 +87,175 @@ export default function SellCarPage() {
           </div>
         </section>
 
-        <SellCarSection />
+        {/* Sell Car Form Section */}
+        <section className="py-20">
+          <div className="container mx-auto px-6">
+            <div className="max-w-3xl mx-auto">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl font-bold text-foreground mb-4">Fahrzeug-Details</h2>
+                <p className="text-lg text-muted-foreground">
+                  Je mehr Details Sie angeben, desto präziser können wir Ihr Fahrzeug bewerten
+                </p>
+              </div>
+              <div className="bg-card p-8 rounded-xl border">
+                <form className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Vorname *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-background"
+                        placeholder="Ihr Vorname"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Nachname *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-background"
+                        placeholder="Ihr Nachname"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        E-Mail *
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-background"
+                        placeholder="ihre.email@beispiel.com"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Telefon *
+                      </label>
+                      <input
+                        type="tel"
+                        required
+                        className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-background"
+                        placeholder="+41 XX XXX XX XX"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid md:grid-cols-3 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Marke *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-background"
+                        placeholder="BMW, Mercedes, etc."
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Modell *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-background"
+                        placeholder="A4, C-Klasse, etc."
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Baujahr *
+                      </label>
+                      <input
+                        type="number"
+                        required
+                        min="1990"
+                        max={new Date().getFullYear()}
+                        className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-background"
+                        placeholder="2020"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid md:grid-cols-3 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Kilometerstand *
+                      </label>
+                      <input
+                        type="number"
+                        required
+                        className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-background"
+                        placeholder="50000"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Kraftstoff *
+                      </label>
+                      <select
+                        required
+                        className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-background"
+                      >
+                        <option value="">Bitte wählen</option>
+                        <option value="Benzin">Benzin</option>
+                        <option value="Diesel">Diesel</option>
+                        <option value="Hybrid">Hybrid</option>
+                        <option value="Elektro">Elektro</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Getriebe *
+                      </label>
+                      <select
+                        required
+                        className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-background"
+                      >
+                        <option value="">Bitte wählen</option>
+                        <option value="Automatik">Automatik</option>
+                        <option value="Manuell">Manuell</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      Preisvorstellung (CHF)
+                    </label>
+                    <input
+                      type="number"
+                      className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-background"
+                      placeholder="25000"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      Zusätzliche Informationen
+                    </label>
+                    <textarea
+                      rows={4}
+                      className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-background resize-none"
+                      placeholder="Besonderheiten, Schäden, Zusatzausstattung, etc."
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full bg-accent text-accent-foreground py-3 rounded-lg hover:bg-accent/90 transition-colors font-semibold"
+                  >
+                    Kostenlose Bewertung anfordern
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
       <Footer />
     </div>
