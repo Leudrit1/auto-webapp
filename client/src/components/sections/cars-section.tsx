@@ -138,10 +138,23 @@ export default function CarsSection() {
             <div className="text-muted-foreground">Laden...</div>
           </div>
         ) : cars && cars.length > 0 ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {cars.map((car) => (
-              <CarCard key={car.id} car={car} />
-            ))}
+          <div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+              {cars.slice(0, 6).map((car) => (
+                <CarCard key={car.id} car={car} />
+              ))}
+            </div>
+            {cars.length > 6 && (
+              <div className="text-center">
+                <Button
+                  onClick={() => window.location.href = '/cars'}
+                  className="bg-primary text-primary-foreground px-8 py-3 hover:bg-primary/90 transition-all"
+                  data-testid="button-view-all-cars"
+                >
+                  Alle Fahrzeuge ansehen ({cars.length} Fahrzeuge)
+                </Button>
+              </div>
+            )}
           </div>
         ) : (
           <div className="text-center py-8">

@@ -95,152 +95,39 @@ export default function SellCarSection() {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12">
-            <div>
-              <h3 className="text-2xl font-semibold text-foreground mb-6">Warum bei uns verkaufen?</h3>
-              <div className="space-y-4">
-                {features.map((feature, index) => (
-                  <div key={index} className="flex items-start space-x-4" data-testid={`feature-${index}`}>
-                    <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                      <feature.icon className="text-primary" size={16} />
+          <div className="text-center">
+            <div className="max-w-4xl mx-auto">
+              <div className="bg-gradient-to-br from-accent/10 to-primary/10 p-12 rounded-2xl border border-accent/20">
+                <div className="w-20 h-20 bg-accent/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <CheckCircle className="text-accent" size={40} />
+                </div>
+                <h3 className="text-3xl font-bold text-foreground mb-6">
+                  Ihr Auto verdient den besten Preis
+                </h3>
+                <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+                  Lassen Sie uns Ihr Fahrzeug professionell bewerten. Mit über 15 Jahren Erfahrung 
+                  im Automobilhandel garantieren wir Ihnen eine faire, transparente Bewertung zu 
+                  aktuellen Marktpreisen. Schnell, unkompliziert und völlig kostenfrei.
+                </p>
+                <div className="grid md:grid-cols-3 gap-6 mb-8">
+                  {features.slice(0, 3).map((feature, index) => (
+                    <div key={index} className="text-center">
+                      <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+                        <feature.icon className="text-accent" size={24} />
+                      </div>
+                      <h4 className="font-semibold text-foreground mb-2">{feature.title}</h4>
+                      <p className="text-sm text-muted-foreground">{feature.description}</p>
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-foreground mb-1">{feature.title}</h4>
-                      <p className="text-muted-foreground">{feature.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="bg-card p-8 rounded-xl border border-border">
-              <h3 className="text-xl font-semibold text-foreground mb-6">Fahrzeug bewerten lassen</h3>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="firstName">Vorname</Label>
-                    <Input
-                      id="firstName"
-                      value={formData.firstName}
-                      onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                      required
-                      data-testid="input-first-name"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="lastName">Nachname</Label>
-                    <Input
-                      id="lastName"
-                      value={formData.lastName}
-                      onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                      required
-                      data-testid="input-last-name"
-                    />
-                  </div>
+                  ))}
                 </div>
-
-                <div>
-                  <Label htmlFor="email">E-Mail</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    required
-                    data-testid="input-email"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="phone">Telefon</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    value={formData.phone || ""}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    data-testid="input-phone"
-                  />
-                </div>
-
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="brand">Marke</Label>
-                    <Input
-                      id="brand"
-                      value={formData.brand}
-                      onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
-                      required
-                      data-testid="input-brand"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="model">Modell</Label>
-                    <Input
-                      id="model"
-                      value={formData.model}
-                      onChange={(e) => setFormData({ ...formData, model: e.target.value })}
-                      required
-                      data-testid="input-model"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid sm:grid-cols-3 gap-4">
-                  <div>
-                    <Label htmlFor="year">Baujahr</Label>
-                    <Input
-                      id="year"
-                      type="number"
-                      value={formData.year}
-                      onChange={(e) => setFormData({ ...formData, year: parseInt(e.target.value) })}
-                      required
-                      data-testid="input-year"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="mileage">Kilometerstand</Label>
-                    <Input
-                      id="mileage"
-                      type="number"
-                      value={formData.mileage}
-                      onChange={(e) => setFormData({ ...formData, mileage: parseInt(e.target.value) })}
-                      required
-                      data-testid="input-mileage"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="desiredPrice">Gewünschter Preis</Label>
-                    <Input
-                      id="desiredPrice"
-                      type="number"
-                      value={formData.desiredPrice || ""}
-                      onChange={(e) => setFormData({ ...formData, desiredPrice: e.target.value ? parseInt(e.target.value) : undefined })}
-                      data-testid="input-desired-price"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <Label htmlFor="description">Zusätzliche Informationen</Label>
-                  <Textarea
-                    id="description"
-                    rows={4}
-                    value={formData.description || ""}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    placeholder="Beschreiben Sie den Zustand Ihres Fahrzeugs..."
-                    data-testid="textarea-description"
-                  />
-                </div>
-
                 <Button
-                  type="submit"
-                  className="w-full"
-                  disabled={sellCarMutation.isPending}
-                  data-testid="button-submit-sell-car"
+                  onClick={() => window.location.href = '/sell-car'}
+                  className="bg-accent text-accent-foreground px-12 py-4 text-lg hover:bg-accent/90 transition-all transform hover:scale-105"
+                  data-testid="button-sell-car-page"
                 >
-                  {sellCarMutation.isPending ? "Wird gesendet..." : "Bewertung anfragen"}
+                  Jetzt Fahrzeug bewerten lassen
                 </Button>
-              </form>
+              </div>
             </div>
           </div>
         </div>

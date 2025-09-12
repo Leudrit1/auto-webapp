@@ -58,22 +58,22 @@ export default function ContactSection() {
     {
       icon: MapPin,
       title: "Adresse",
-      content: ["Autostrasse 123", "8001 Zürich", "Schweiz"],
+      content: ["Industrie Neuhof 17a", "3422 Kirchberg", "Schweiz"],
     },
     {
       icon: Phone,
       title: "Telefon",
-      content: ["+41 44 123 45 67"],
+      content: ["076 281 10 68"],
     },
     {
       icon: Mail,
       title: "E-Mail",
-      content: ["info@ri-automobile.ch"],
+      content: ["info@riautomobile.ch"],
     },
     {
       icon: Clock,
       title: "Öffnungszeiten",
-      content: ["Mo - Fr: 08:00 - 18:00", "Sa: 09:00 - 16:00", "So: Geschlossen"],
+      content: ["Montag bis Freitag: 9:00 - 12:00", "13:00 - 18:00", "Samstag: 9:00 - 12:00"],
     },
   ];
 
@@ -88,146 +88,45 @@ export default function ContactSection() {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-16">
-            <div>
-              <h3 className="text-2xl font-semibold text-foreground mb-8">Kontaktinformationen</h3>
-
-              <div className="space-y-6">
-                {contactInfo.map((info, index) => (
-                  <div key={index} className="flex items-start space-x-4" data-testid={`contact-info-${index}`}>
-                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <info.icon className="text-primary" size={24} />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-foreground mb-1">{info.title}</h4>
-                      <div className="text-muted-foreground">
-                        {info.content.map((line, lineIndex) => (
-                          <p key={lineIndex}>{line}</p>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-8">
-                <h4 className="font-semibold text-foreground mb-4">Folgen Sie uns</h4>
-                <div className="flex space-x-4">
-                  <a
-                    href="#"
-                    className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center hover:bg-primary/20 transition-colors"
-                    data-testid="social-facebook"
-                  >
-                    <i className="fab fa-facebook text-primary"></i>
-                  </a>
-                  <a
-                    href="#"
-                    className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center hover:bg-primary/20 transition-colors"
-                    data-testid="social-instagram"
-                  >
-                    <i className="fab fa-instagram text-primary"></i>
-                  </a>
-                  <a
-                    href="#"
-                    className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center hover:bg-primary/20 transition-colors"
-                    data-testid="social-linkedin"
-                  >
-                    <i className="fab fa-linkedin text-primary"></i>
-                  </a>
+          <div className="text-center">
+            <div className="max-w-4xl mx-auto">
+              <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-12 rounded-2xl border border-primary/20">
+                <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Mail className="text-primary" size={40} />
                 </div>
-              </div>
-            </div>
-
-            <div className="bg-card p-8 rounded-xl border border-border">
-              <h3 className="text-xl font-semibold text-foreground mb-6">Nachricht senden</h3>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="contact-firstName">Vorname</Label>
-                    <Input
-                      id="contact-firstName"
-                      value={formData.firstName}
-                      onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                      required
-                      data-testid="input-contact-first-name"
-                    />
+                <h3 className="text-3xl font-bold text-foreground mb-6">
+                  Wir sind für Sie da
+                </h3>
+                <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+                  Haben Sie Fragen zu unseren Fahrzeugen, benötigen Sie eine Beratung oder möchten 
+                  Sie einen Besichtigungstermin vereinbaren? Unser erfahrenes Team steht Ihnen 
+                  gerne zur Verfügung und beantwortet alle Ihre Fragen rund um Ihren Traumwagen.
+                </p>
+                <div className="grid md:grid-cols-3 gap-6 mb-8">
+                  <div className="text-center">
+                    <Phone className="text-primary mx-auto mb-3" size={32} />
+                    <h4 className="font-semibold text-foreground mb-2">Schnell erreichbar</h4>
+                    <p className="text-sm text-muted-foreground">Telefonisch täglich erreichbar</p>
                   </div>
-                  <div>
-                    <Label htmlFor="contact-lastName">Nachname</Label>
-                    <Input
-                      id="contact-lastName"
-                      value={formData.lastName}
-                      onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                      required
-                      data-testid="input-contact-last-name"
-                    />
+                  <div className="text-center">
+                    <Mail className="text-primary mx-auto mb-3" size={32} />
+                    <h4 className="font-semibold text-foreground mb-2">Persönlicher Service</h4>
+                    <p className="text-sm text-muted-foreground">Individuelle Beratung garantiert</p>
+                  </div>
+                  <div className="text-center">
+                    <MapPin className="text-primary mx-auto mb-3" size={32} />
+                    <h4 className="font-semibold text-foreground mb-2">Vor Ort</h4>
+                    <p className="text-sm text-muted-foreground">Besuchen Sie uns in Kirchberg</p>
                   </div>
                 </div>
-
-                <div>
-                  <Label htmlFor="contact-email">E-Mail</Label>
-                  <Input
-                    id="contact-email"
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    required
-                    data-testid="input-contact-email"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="contact-phone">Telefon</Label>
-                  <Input
-                    id="contact-phone"
-                    type="tel"
-                    value={formData.phone || ""}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    data-testid="input-contact-phone"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="contact-subject">Betreff</Label>
-                  <Select
-                    value={formData.subject}
-                    onValueChange={(value) => setFormData({ ...formData, subject: value })}
-                  >
-                    <SelectTrigger data-testid="select-contact-subject">
-                      <SelectValue placeholder="Bitte wählen" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="general">Allgemeine Anfrage</SelectItem>
-                      <SelectItem value="car-inquiry">Fahrzeug-Anfrage</SelectItem>
-                      <SelectItem value="service">Service & Wartung</SelectItem>
-                      <SelectItem value="financing">Finanzierung</SelectItem>
-                      <SelectItem value="other">Sonstiges</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <Label htmlFor="contact-message">Nachricht</Label>
-                  <Textarea
-                    id="contact-message"
-                    rows={5}
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder="Ihre Nachricht..."
-                    required
-                    data-testid="textarea-contact-message"
-                  />
-                </div>
-
                 <Button
-                  type="submit"
-                  className="w-full"
-                  disabled={contactMutation.isPending}
-                  data-testid="button-send-contact"
+                  onClick={() => window.location.href = '/contact'}
+                  className="bg-primary text-primary-foreground px-12 py-4 text-lg hover:bg-primary/90 transition-all transform hover:scale-105"
+                  data-testid="button-contact-page"
                 >
-                  {contactMutation.isPending ? "Wird gesendet..." : "Nachricht senden"}
+                  Jetzt Kontakt aufnehmen
                 </Button>
-              </form>
+              </div>
             </div>
           </div>
         </div>

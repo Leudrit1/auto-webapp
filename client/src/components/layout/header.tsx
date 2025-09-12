@@ -28,48 +28,41 @@ export default function Header() {
           </div>
 
           <div className="hidden md:flex items-center space-x-8">
-            <button
-              onClick={() => scrollToSection("home")}
-              className="nav-link text-foreground hover:text-primary transition-colors"
+            <a
+              href="/"
+              className="nav-link text-white hover:text-primary transition-colors"
               data-testid="nav-home"
             >
               Home
-            </button>
-            <button
-              onClick={() => scrollToSection("services")}
-              className="nav-link text-foreground hover:text-primary transition-colors"
-              data-testid="nav-services"
-            >
-              Dienstleistungen
-            </button>
-            <button
-              onClick={() => scrollToSection("cars")}
-              className="nav-link text-foreground hover:text-primary transition-colors"
+            </a>
+            <a
+              href="/cars"
+              className="nav-link text-white hover:text-primary transition-colors"
               data-testid="nav-cars"
             >
               Unsere Autos
-            </button>
-            <button
-              onClick={() => scrollToSection("about")}
-              className="nav-link text-foreground hover:text-primary transition-colors"
+            </a>
+            <a
+              href="/about"
+              className="nav-link text-white hover:text-primary transition-colors"
               data-testid="nav-about"
             >
               Über uns
-            </button>
-            <button
-              onClick={() => scrollToSection("contact")}
-              className="nav-link text-foreground hover:text-primary transition-colors"
+            </a>
+            <a
+              href="/contact"
+              className="nav-link text-white hover:text-primary transition-colors"
               data-testid="nav-contact"
             >
               Kontakt
-            </button>
-            <button
-              onClick={() => scrollToSection("sell")}
+            </a>
+            <a
+              href="/sell-car"
               className="nav-link text-accent hover:text-accent/80 transition-colors"
               data-testid="nav-sell"
             >
               Auto verkaufen
-            </button>
+            </a>
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
@@ -96,48 +89,41 @@ export default function Header() {
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden mt-4 space-y-4 border-t border-border pt-4">
-            <button
-              onClick={() => scrollToSection("home")}
-              className="block w-full text-left text-foreground hover:text-primary transition-colors"
+            <a
+              href="/"
+              className="block w-full text-left text-white hover:text-primary transition-colors"
               data-testid="nav-mobile-home"
             >
               Home
-            </button>
-            <button
-              onClick={() => scrollToSection("services")}
-              className="block w-full text-left text-foreground hover:text-primary transition-colors"
-              data-testid="nav-mobile-services"
-            >
-              Dienstleistungen
-            </button>
-            <button
-              onClick={() => scrollToSection("cars")}
-              className="block w-full text-left text-foreground hover:text-primary transition-colors"
+            </a>
+            <a
+              href="/cars"
+              className="block w-full text-left text-white hover:text-primary transition-colors"
               data-testid="nav-mobile-cars"
             >
               Unsere Autos
-            </button>
-            <button
-              onClick={() => scrollToSection("about")}
-              className="block w-full text-left text-foreground hover:text-primary transition-colors"
+            </a>
+            <a
+              href="/about"
+              className="block w-full text-left text-white hover:text-primary transition-colors"
               data-testid="nav-mobile-about"
             >
               Über uns
-            </button>
-            <button
-              onClick={() => scrollToSection("contact")}
-              className="block w-full text-left text-foreground hover:text-primary transition-colors"
+            </a>
+            <a
+              href="/contact"
+              className="block w-full text-left text-white hover:text-primary transition-colors"
               data-testid="nav-mobile-contact"
             >
               Kontakt
-            </button>
-            <button
-              onClick={() => scrollToSection("sell")}
+            </a>
+            <a
+              href="/sell-car"
               className="block w-full text-left text-accent hover:text-accent/80 transition-colors"
               data-testid="nav-mobile-sell"
             >
               Auto verkaufen
-            </button>
+            </a>
             {user ? (
               <Button asChild className="w-full" data-testid="button-mobile-admin-logged-in">
                 <a href="/admin">Admin Panel</a>

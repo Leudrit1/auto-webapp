@@ -119,24 +119,24 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold text-foreground mb-4">Kontakt</h3>
             <ul className="space-y-2 text-muted-foreground">
-              <li>Autostrasse 123</li>
-              <li>8001 Zürich, Schweiz</li>
+              <li>Industrie Neuhof 17a</li>
+              <li>3422 Kirchberg, Schweiz</li>
               <li className="pt-2">
                 <a
-                  href="tel:+41441234567"
+                  href="tel:0762811068"
                   className="hover:text-primary transition-colors"
                   data-testid="link-phone"
                 >
-                  +41 44 123 45 67
+                  076 281 10 68
                 </a>
               </li>
               <li>
                 <a
-                  href="mailto:info@ri-automobile.ch"
+                  href="mailto:info@riautomobile.ch"
                   className="hover:text-primary transition-colors"
                   data-testid="link-email"
                 >
-                  info@ri-automobile.ch
+                  info@riautomobile.ch
                 </a>
               </li>
             </ul>
