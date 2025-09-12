@@ -53,12 +53,7 @@ export default function AuthPage() {
             </div>
             <h1 className="text-2xl font-bold text-foreground">Admin-Zugang</h1>
             <p className="text-muted-foreground">Melden Sie sich an, um das Admin-Panel zu verwenden</p>
-            <div className="mt-4 p-4 bg-muted rounded-lg text-sm text-muted-foreground">
-              <p className="font-medium mb-2">So melden Sie sich an:</p>
-              <p>1. Verwenden Sie Ihren Admin-Benutzernamen</p>
-              <p>2. Geben Sie Ihr Passwort ein</p>
-              <p>3. Nach erfolgreicher Anmeldung werden Sie zum Admin-Panel weitergeleitet</p>
-            </div>
+            
           </div>
 
           <Card>
