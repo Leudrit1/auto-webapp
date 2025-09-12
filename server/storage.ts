@@ -25,19 +25,19 @@ export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
-
+  
   getCars(filters?: CarFilters): Promise<Car[]>;
   getCarById(id: string): Promise<Car | undefined>;
   createCar(car: InsertCar): Promise<Car>;
   updateCar(id: string, car: InsertCar): Promise<Car | undefined>;
   deleteCar(id: string): Promise<boolean>;
-
+  
   createContactMessage(message: InsertContactMessage): Promise<ContactMessage>;
   getContactMessages(): Promise<ContactMessage[]>;
-
+  
   createSellCarRequest(request: InsertSellCarRequest): Promise<SellCarRequest>;
   getSellCarRequests(): Promise<SellCarRequest[]>;
-
+  
   sessionStore: session.Store;
 }
 
@@ -62,9 +62,11 @@ export class MemStorage implements IStorage {
   }
 
   private async initialize() {
-    this.sessionStore.sync();
-    await this.createDefaultAdmin();
-    await this.addSampleCars();
+    // Create default admin user with proper scrypt hash
+    await this.createDefaultAdminUser();
+
+    // Add sample cars
+    this.addSampleCars();
   }
 
   private addSampleCars() {
