@@ -159,13 +159,59 @@ export default function ContactPage() {
                 Schauen Sie gerne bei uns vorbei und lassen Sie sich von unseren Fahrzeugen begeistern
               </p>
             </div>
-            <div className="bg-card p-8 rounded-xl">
-              <div className="aspect-video bg-muted-foreground/20 rounded-lg flex items-center justify-center">
-                <div className="text-center">
-                  <MapPin className="text-primary mx-auto mb-4" size={48} />
-                  <p className="text-muted-foreground">
-                    Industrie Neuhof 17a, 3422 Kirchberg
-                  </p>
+            <div className="bg-card p-8 rounded-xl shadow-lg">
+              <div className="grid lg:grid-cols-2 gap-8 items-center">
+                <div>
+                  <h3 className="text-xl font-semibold text-foreground mb-4">Unser Standort</h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-3">
+                      <MapPin className="text-primary" size={20} />
+                      <div>
+                        <p className="font-medium text-foreground">Industrie Neuhof 17a</p>
+                        <p className="text-muted-foreground">3422 Kirchberg, Schweiz</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <Phone className="text-primary" size={20} />
+                      <p className="text-muted-foreground">076 281 10 68</p>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <Clock className="text-primary" size={20} />
+                      <div>
+                        <p className="text-muted-foreground">Mo-Fr: 9:00-12:00, 13:00-18:00</p>
+                        <p className="text-muted-foreground">Sa: 9:00-12:00</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-6">
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Wir befinden uns im Industriegebiet Neuhof in Kirchberg. 
+                      Kostenlose Parkplätze sind direkt vor unserem Geschäft verfügbar.
+                    </p>
+                    <a
+                      href="https://www.google.com/maps/dir//Industrie+Neuhof+17a,+3422+Kirchberg,+Switzerland"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center space-x-2 text-primary hover:text-primary/80 font-medium"
+                    >
+                      <span>Route planen</span>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+                <div className="aspect-video rounded-lg overflow-hidden shadow-md">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2693.8756439284434!2d7.535833276923734!3d47.49667337117685!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x478e1a8f4c8b9b9b%3A0x4c8b9b9b4c8b9b9b!2sIndustrie%20Neuhof%2017a%2C%203422%20Kirchberg%2C%20Switzerland!5e0!3m2!1sen!2sch!4v1699999999999!5m2!1sen!2sch"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="RI Automobile Standort"
+                  />
                 </div>
               </div>
             </div>
