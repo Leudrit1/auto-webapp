@@ -68,15 +68,48 @@ export default function CarsSection() {
     
     script.onload = () => {
       console.log('AutoScout24 HCI script loaded successfully');
-      // Still set error to true initially, only change if widget actually works
-      setTimeout(() => {
+      console.log('Current domain:', window.location.hostname);
+      console.log('Config ID:', '12980');
+      
+      // Multiple checks for widget initialization
+      let checkCount = 0;
+      const maxChecks = 10;
+      
+      const checkWidget = () => {
+        checkCount++;
         const widgetContainer = document.querySelector('.hci-container');
-        if (widgetContainer && widgetContainer.children.length > 0) {
+        console.log(`Check ${checkCount}/${maxChecks}: Widget container found:`, !!widgetContainer);
+        console.log(`Check ${checkCount}/${maxChecks}: Widget children count:`, widgetContainer?.children.length || 0);
+        
+        // Check for various widget indicators
+        const hasContent = widgetContainer && widgetContainer.children.length > 0;
+        const hasIframe = widgetContainer && widgetContainer.querySelector('iframe');
+        const hasAutoScoutElements = widgetContainer && widgetContainer.querySelector('[class*="autoscout"], [class*="hci"], [id*="autoscout"]');
+        
+        console.log(`Check ${checkCount}: hasContent:`, hasContent, 'hasIframe:', hasIframe, 'hasAutoScoutElements:', hasAutoScoutElements);
+        
+        if (hasContent || hasIframe || hasAutoScoutElements) {
+          console.log('✅ AutoScout24 widget loaded successfully!');
           setWidgetError(false);
+          return;
+        }
+        
+        if (checkCount < maxChecks) {
+          console.log(`Widget not ready yet, checking again in 1 second...`);
+          setTimeout(checkWidget, 1000);
         } else {
+          console.log('❌ AutoScout24 widget failed to initialize after', maxChecks, 'checks');
+          console.log('Possible issues:');
+          console.log('1. Config ID 12980 might be incorrect');
+          console.log('2. Domain not whitelisted by AutoScout24');
+          console.log('3. AutoScout24 server issues');
+          console.log('4. CORS or security restrictions');
           setWidgetError(true);
         }
-      }, 5000);
+      };
+      
+      // Start checking after a short delay
+      setTimeout(checkWidget, 2000);
     };
     
     document.head.appendChild(script);
@@ -263,6 +296,28 @@ export default function CarsSection() {
                   </div>
                 )}
                 
+                {/* Production Debug Info */}
+                {!(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && (
+                  <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
+                    <div className="text-sm text-blue-800 dark:text-blue-200">
+                      <strong>Production Mode:</strong> Domain: {window.location.hostname}
+                      <br />
+                      <strong>Config ID:</strong> 12980
+                      <br />
+                      <strong>Status:</strong> Script geladen, Widget initialisiert sich...
+                      <br />
+                      <strong>Debug:</strong> Öffnen Sie die Browser-Konsole für detaillierte Logs.
+                      <br />
+                      <strong>Mögliche Lösungen:</strong>
+                      <ul className="list-disc list-inside mt-2 text-xs">
+                        <li>Config ID 12980 überprüfen</li>
+                        <li>Domain bei AutoScout24 whitelisten lassen</li>
+                        <li>AutoScout24 Support kontaktieren</li>
+                      </ul>
+                    </div>
+                  </div>
+                )}
+                
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Button 
                     asChild
@@ -279,22 +334,66 @@ export default function CarsSection() {
                   <Button 
                     variant="outline"
                     onClick={() => {
+                      console.log('Retrying HCI widget load...');
                       setWidgetError(false);
+                      // Force reload the script
+                      const existingScript = document.querySelector('script[src="https://www.autoscout24.ch/assets/hci/v2/hci.current.js"]');
+                      if (existingScript) {
+                        existingScript.remove();
+                      }
                       // Trigger a re-render to try loading the widget again
-                      setTimeout(() => setWidgetError(true), 1000);
+                      setTimeout(() => {
+                        const script = document.createElement('script');
+                        script.src = 'https://www.autoscout24.ch/assets/hci/v2/hci.current.js';
+                        script.async = true;
+                        script.onload = () => {
+                          console.log('Retry: AutoScout24 HCI script loaded');
+                          setTimeout(() => {
+                            const widgetContainer = document.querySelector('.hci-container');
+                            if (widgetContainer && widgetContainer.children.length > 0) {
+                              console.log('✅ Retry successful!');
+                              setWidgetError(false);
+                            } else {
+                              console.log('❌ Retry failed');
+                              setWidgetError(true);
+                            }
+                          }, 3000);
+                        };
+                        script.onerror = () => {
+                          console.log('❌ Retry failed to load script');
+                          setWidgetError(true);
+                        };
+                        document.head.appendChild(script);
+                      }, 100);
                     }}
                   >
                     Erneut versuchen
+                  </Button>
+                  
+                  <Button 
+                    variant="secondary"
+                    onClick={() => {
+                      console.log('Testing different Config ID...');
+                      const container = document.querySelector('.hci-container');
+                      if (container) {
+                        container.setAttribute('data-config-id', '1866516');
+                        console.log('Changed Config ID to 1866516 (seller ID)');
+                        setTimeout(() => {
+                          console.log('Widget children after Config ID change:', container.children.length);
+                        }, 2000);
+                      }
+                    }}
+                  >
+                    Test Config ID
                   </Button>
                 </div>
               </div>
             ) : (
               <div 
                 className="hci-container" 
-                data-config-id="1866516" 
+                data-config-id="12980" 
                 data-language="de" 
                 data-entry-point="search"
-                data-seller-id="1866516"
               ></div>
             )}
           </div>
