@@ -21,6 +21,8 @@ export const cars = pgTable("cars", {
   fuel: text("fuel").notNull(),
   imageUrl: text("image_url").notNull(),
   description: text("description"),
+  isAutoScout: boolean("is_autoscout").notNull().default(false),
+  autoscoutId: text("autoscout_id"),
   createdAt: timestamp("created_at").notNull().default(sql`now()`),
 });
 

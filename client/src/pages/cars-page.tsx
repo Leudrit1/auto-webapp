@@ -2,6 +2,7 @@
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import CarsSection from "@/components/sections/cars-section";
+import AutoScoutSection from "@/components/sections/autoscout-section";
 
 export default function CarsPage() {
   return (
@@ -20,6 +21,7 @@ export default function CarsPage() {
           </div>
         </div>
         <CarsSection />
+        <AutoScoutSection />
       </main>
       <Footer />
     </div>

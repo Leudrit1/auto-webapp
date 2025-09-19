@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -12,6 +12,7 @@ export default function CarsSection() {
     minYear: "all",
     maxKm: "all",
   });
+  const [widgetError, setWidgetError] = useState(true); // Start with error state
 
   const { data: cars, isLoading } = useQuery<Car[]>({
     queryKey: ["/api/cars", filters.brand, filters.maxPrice, filters.minYear, filters.maxKm],
@@ -27,6 +28,76 @@ export default function CarsSection() {
       return response.json();
     },
   });
+
+  // Load AutoScout24 HCI script with error handling
+  useEffect(() => {
+    // Check if we're in a development environment or if there are known issues
+    const isDevelopment = window.location.hostname === 'localhost' || 
+                         window.location.hostname === '127.0.0.1' ||
+                         window.location.hostname.includes('ngrok') ||
+                         window.location.hostname.includes('localhost');
+    
+    // Check if we're in a test environment
+    const isTestEnvironment = window.location.hostname.includes('ngrok') ||
+                             window.location.hostname.includes('vercel') ||
+                             window.location.hostname.includes('netlify') ||
+                             window.location.hostname.includes('github');
+    
+    if (isDevelopment && !isTestEnvironment) {
+      console.log('Development environment detected - AutoScout24 widget may not work properly');
+      console.log('To test HCI widget:');
+      console.log('1. Use ngrok: ngrok http 3000');
+      console.log('2. Deploy to Vercel/Netlify for testing');
+      console.log('3. Use production domain');
+      setWidgetError(true);
+      return;
+    }
+    
+    if (isTestEnvironment) {
+      console.log('Test environment detected - attempting to load HCI widget');
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://www.autoscout24.ch/assets/hci/v2/hci.current.js';
+    script.async = true;
+    
+    script.onerror = () => {
+      console.warn('AutoScout24 HCI script failed to load');
+      setWidgetError(true);
+    };
+    
+    script.onload = () => {
+      console.log('AutoScout24 HCI script loaded successfully');
+      // Still set error to true initially, only change if widget actually works
+      setTimeout(() => {
+        const widgetContainer = document.querySelector('.hci-container');
+        if (widgetContainer && widgetContainer.children.length > 0) {
+          setWidgetError(false);
+        } else {
+          setWidgetError(true);
+        }
+      }, 5000);
+    };
+    
+    document.head.appendChild(script);
+
+    // Set a shorter timeout to detect if widget doesn't load
+    const timeout = setTimeout(() => {
+      const widgetContainer = document.querySelector('.hci-container');
+      if (widgetContainer && widgetContainer.children.length === 0) {
+        console.warn('AutoScout24 widget did not initialize within timeout');
+        setWidgetError(true);
+      }
+    }, 5000); // 5 second timeout
+
+    return () => {
+      clearTimeout(timeout);
+      const existingScript = document.querySelector('script[src="https://www.autoscout24.ch/assets/hci/v2/hci.current.js"]');
+      if (existingScript) {
+        document.head.removeChild(existingScript);
+      }
+    };
+  }, []);
 
   const resetFilters = () => {
     setFilters({
@@ -161,6 +232,73 @@ export default function CarsSection() {
             <div className="text-muted-foreground">Keine Fahrzeuge gefunden</div>
           </div>
         )}
+        
+        {/* AutoScout24 HCI Widget */}
+        <div className="mt-20">
+          <div className="text-center mb-12">
+            <h3 className="text-3xl font-bold text-foreground mb-4">Unsere Fahrzeuge auf AutoScout24</h3>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Entdecken Sie unsere aktuellen Angebote direkt von AutoScout24
+            </p>
+          </div>
+          
+          <div className="bg-card p-6 rounded-xl border border-border">
+            {widgetError ? (
+              <div className="text-center py-8">
+                <div className="text-muted-foreground mb-4">
+                  AutoScout24 Widget ist derzeit nicht verfügbar
+                </div>
+                <div className="text-sm text-muted-foreground mb-4">
+                  Sie können unsere Fahrzeuge über den Admin-Bereich verwalten oder direkt auf AutoScout24 besuchen
+                </div>
+                
+                {/* Development/Testing Info */}
+                {(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && (
+                  <div className="bg-yellow-50 dark:bg-yellow-950/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-6">
+                    <div className="text-sm text-yellow-800 dark:text-yellow-200">
+                      <strong>Development Mode:</strong> HCI Widget funktioniert nur mit echten Domains.
+                      <br />
+                      <strong>Zum Testen:</strong> Verwenden Sie ngrok oder deployen Sie auf Vercel/Netlify.
+                    </div>
+                  </div>
+                )}
+                
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <Button 
+                    asChild
+                    className="bg-primary text-primary-foreground hover:bg-primary/90"
+                  >
+                    <a 
+                      href="https://www.autoscout24.ch" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                    >
+                      Zu AutoScout24 gehen
+                    </a>
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    onClick={() => {
+                      setWidgetError(false);
+                      // Trigger a re-render to try loading the widget again
+                      setTimeout(() => setWidgetError(true), 1000);
+                    }}
+                  >
+                    Erneut versuchen
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div 
+                className="hci-container" 
+                data-config-id="1866516" 
+                data-language="de" 
+                data-entry-point="search"
+                data-seller-id="1866516"
+              ></div>
+            )}
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
-import { Car, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 export default function Header() {
   const { user } = useAuth();
@@ -16,15 +16,11 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed top-0 w-full bg-background/95 backdrop-blur-sm border-b border-border z-50">
+    <header className="fixed top-0 w-full bg-black border-b border-border z-50">
       <nav className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-              <Car className="text-primary-foreground text-xl" />
-            </div>
-            <span className="text-2xl font-bold text-foreground">RI automobile</span>
-            <span className="text-sm text-muted-foreground">gmbh</span>
+            <a href="/"><img src="/images/lastlogo.png" alt="AutoBala Logo" className="w-15 h-10" /></a>
           </div>
 
           <div className="hidden md:flex items-center space-x-8">

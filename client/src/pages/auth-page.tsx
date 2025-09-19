@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Car, Shield, ArrowLeft } from "lucide-react";
+import { Shield, ArrowLeft } from "lucide-react";
 
 export default function AuthPage() {
   const { user, loginMutation } = useAuth();
@@ -45,11 +45,7 @@ export default function AuthPage() {
           
           <div className="text-center mb-8">
             <div className="flex items-center justify-center space-x-2 mb-4">
-              <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                <Car className="text-primary-foreground text-xl" />
-              </div>
-              <span className="text-2xl font-bold text-foreground">RI automobile</span>
-              <span className="text-sm text-muted-foreground">gmbh</span>
+            <a href="/"><img src="/images/lastlogo.png" alt="AutoBala Logo" className="w-15 h-10" /></a>
             </div>
             <h1 className="text-2xl font-bold text-foreground">Admin-Zugang</h1>
             <p className="text-muted-foreground">Melden Sie sich an, um das Admin-Panel zu verwenden</p>

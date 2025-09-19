@@ -128,7 +128,9 @@ export class MemStorage implements IStorage {
     sampleCars.forEach(car => {
       const carWithProperTypes: Car = {
         ...car,
-        description: car.description || null
+        description: car.description || null,
+        isAutoScout: false,
+        autoscoutId: null
       };
       this.cars.set(car.id, carWithProperTypes);
     });
@@ -136,7 +138,7 @@ export class MemStorage implements IStorage {
 
   private async createDefaultAdminUser() {
     const adminId = randomUUID();
-    const hashedPassword = await hashPassword("admin123");
+    const hashedPassword = await hashPassword("RIadmin2025.");
     const adminUser: User = {
       id: adminId,
       username: "admin",
@@ -190,7 +192,14 @@ export class MemStorage implements IStorage {
 
   async createCar(insertCar: InsertCar): Promise<Car> {
     const id = randomUUID();
-    const car: Car = { ...insertCar, id, createdAt: new Date(), description: insertCar.description || null };
+    const car: Car = { 
+      ...insertCar, 
+      id, 
+      createdAt: new Date(), 
+      description: insertCar.description || null,
+      isAutoScout: insertCar.isAutoScout || false,
+      autoscoutId: insertCar.autoscoutId || null
+    };
     this.cars.set(id, car);
     return car;
   }
@@ -199,7 +208,14 @@ export class MemStorage implements IStorage {
     const existingCar = this.cars.get(id);
     if (!existingCar) return undefined;
 
-    const updatedCar: Car = { ...insertCar, id, createdAt: existingCar.createdAt, description: insertCar.description || null };
+    const updatedCar: Car = { 
+      ...insertCar, 
+      id, 
+      createdAt: existingCar.createdAt, 
+      description: insertCar.description || null,
+      isAutoScout: insertCar.isAutoScout || false,
+      autoscoutId: insertCar.autoscoutId || null
+    };
     this.cars.set(id, updatedCar);
     return updatedCar;
   }
@@ -230,6 +246,32 @@ export class MemStorage implements IStorage {
   async getSellCarRequests(): Promise<SellCarRequest[]> {
     return Array.from(this.sellCarRequests.values())
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }
+
+  // AutoScout methods
+  async getAutoScoutCars(): Promise<Car[]> {
+    return Array.from(this.cars.values())
+      .filter(car => car.isAutoScout)
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }
+
+  async deleteAutoScoutCars(): Promise<void> {
+    const autoScoutCars = Array.from(this.cars.values()).filter(car => car.isAutoScout);
+    autoScoutCars.forEach(car => this.cars.delete(car.id));
+  }
+
+  async createAutoScoutCar(insertCar: InsertCar): Promise<Car> {
+    const id = randomUUID();
+    const car: Car = { 
+      ...insertCar, 
+      id, 
+      createdAt: new Date(), 
+      description: insertCar.description || null,
+      isAutoScout: true,
+      autoscoutId: insertCar.autoscoutId || null
+    };
+    this.cars.set(id, car);
+    return car;
   }
 }
 

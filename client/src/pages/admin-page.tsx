@@ -23,6 +23,8 @@ export default function AdminPage() {
   const { toast } = useToast();
   const [editingCar, setEditingCar] = useState<CarType | null>(null);
   const [isCarDialogOpen, setIsCarDialogOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const [carForm, setCarForm] = useState<InsertCar>({
     brand: "",
@@ -48,6 +50,19 @@ export default function AdminPage() {
     queryKey: ["/api/sell-car"],
   });
 
+  const uploadMutation = useMutation({
+    mutationFn: async (file: File) => {
+      const formData = new FormData();
+      formData.append('image', file);
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      if (!res.ok) throw new Error('Upload failed');
+      return await res.json();
+    },
+  });
+
   const createCarMutation = useMutation({
     mutationFn: async (carData: InsertCar) => {
       const res = await apiRequest("POST", "/api/cars", carData);
@@ -57,6 +72,7 @@ export default function AdminPage() {
       queryClient.invalidateQueries({ queryKey: ["/api/cars"] });
       setIsCarDialogOpen(false);
       resetCarForm();
+      setSelectedFile(null);
       toast({ title: "Erfolg", description: "Fahrzeug wurde hinzugefügt" });
     },
     onError: () => {
@@ -94,6 +110,27 @@ export default function AdminPage() {
     },
   });
 
+  const refreshAutoScoutMutation = useMutation({
+    mutationFn: async () => {
+      const res = await apiRequest("POST", "/api/autoscout/refresh");
+      return await res.json();
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/cars"] });
+      toast({ 
+        title: "Erfolg", 
+        description: `${data.count} AutoScout24 Fahrzeuge wurden aktualisiert` 
+      });
+    },
+    onError: () => {
+      toast({ 
+        title: "Fehler", 
+        description: "AutoScout24 Fahrzeuge konnten nicht aktualisiert werden", 
+        variant: "destructive" 
+      });
+    },
+  });
+
   const resetCarForm = () => {
     setCarForm({
       brand: "",
@@ -106,11 +143,24 @@ export default function AdminPage() {
       imageUrl: "",
       description: "",
     });
+    setSelectedFile(null);
   };
 
-  const handleCarSubmit = (e: React.FormEvent) => {
+  const handleCarSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (editingCar) {
+    
+    if (selectedFile && !editingCar) {
+      setIsUploading(true);
+      try {
+        const uploadResult = await uploadMutation.mutateAsync(selectedFile);
+        const carDataWithImage = { ...carForm, imageUrl: uploadResult.url };
+        createCarMutation.mutate(carDataWithImage);
+      } catch (error) {
+        toast({ title: "Fehler", description: "Bild konnte nicht hochgeladen werden", variant: "destructive" });
+        setIsUploading(false);
+        return;
+      }
+    } else if (editingCar) {
       updateCarMutation.mutate({ id: editingCar.id, data: carForm });
     } else {
       createCarMutation.mutate(carForm);
@@ -149,11 +199,7 @@ export default function AdminPage() {
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                <Car className="text-primary-foreground text-xl" />
-              </div>
-              <span className="text-2xl font-bold text-foreground">RI automobile</span>
-              <span className="text-sm text-muted-foreground">gmbh - Admin</span>
+            <a href="/"><img src="/images/lastlogo.png" alt="AutoBala Logo" className="w-15 h-10" /></a>
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-muted-foreground">Willkommen, {user.username}</span>
@@ -167,9 +213,10 @@ export default function AdminPage() {
                 <LogOut className="w-4 h-4 mr-2" />
                 Abmelden
               </Button>
+                </div>
+              </div>
+              
             </div>
-          </div>
-        </div>
       </header>
 
       <main className="container mx-auto px-6 py-8">
@@ -181,15 +228,26 @@ export default function AdminPage() {
           </TabsList>
 
           <TabsContent value="cars" className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h1 className="text-3xl font-bold text-foreground">Fahrzeuge verwalten</h1>
-              <Dialog open={isCarDialogOpen} onOpenChange={setIsCarDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button onClick={() => { setEditingCar(null); resetCarForm(); }} data-testid="button-add-car">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Fahrzeug hinzufügen
-                  </Button>
-                </DialogTrigger>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h1 className="text-3xl font-bold text-foreground">Fahrzeuge verwalten</h1>
+                <div className="flex space-x-2">
+                <Button
+                  onClick={() => refreshAutoScoutMutation.mutate()}
+                  disabled={refreshAutoScoutMutation.isPending}
+                  variant="outline"
+                  data-testid="button-refresh-autoscout"
+                  title="Aktualisiert Fahrzeuge von AutoScout24 Profil: seller-1866516"
+                >
+                  {refreshAutoScoutMutation.isPending ? "Wird aktualisiert..." : "AutoScout24 aktualisieren"}
+                </Button>
+                <Dialog open={isCarDialogOpen} onOpenChange={setIsCarDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button onClick={() => { setEditingCar(null); resetCarForm(); }} data-testid="button-add-car">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Fahrzeug hinzufügen
+                    </Button>
+                  </DialogTrigger>
                 <DialogContent className="max-w-2xl">
                   <DialogHeader>
                     <DialogTitle>{editingCar ? "Fahrzeug bearbeiten" : "Neues Fahrzeug hinzufügen"}</DialogTitle>
@@ -281,14 +339,38 @@ export default function AdminPage() {
                       </div>
                     </div>
                     <div>
-                      <Label htmlFor="imageUrl">Bild-URL</Label>
+                      <Label htmlFor="imageFile">Bild hochladen</Label>
                       <Input
-                        id="imageUrl"
-                        value={carForm.imageUrl}
-                        onChange={(e) => setCarForm({ ...carForm, imageUrl: e.target.value })}
-                        required
+                        id="imageFile"
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            setSelectedFile(file);
+                            // Preview the image
+                            const reader = new FileReader();
+                            reader.onload = (e) => {
+                              setCarForm({ ...carForm, imageUrl: e.target?.result as string });
+                            };
+                            reader.readAsDataURL(file);
+                          }
+                        }}
+                        required={!editingCar}
                         data-testid="input-car-image"
                       />
+                      {selectedFile && (
+                        <div className="mt-2">
+                          <img 
+                            src={carForm.imageUrl} 
+                            alt="Preview" 
+                            className="w-32 h-20 object-cover rounded border"
+                          />
+                          <p className="text-sm text-muted-foreground mt-1">
+                            Ausgewählt: {selectedFile.name}
+                          </p>
+                        </div>
+                      )}
                     </div>
                     <div>
                       <Label htmlFor="description">Beschreibung</Label>
@@ -303,10 +385,12 @@ export default function AdminPage() {
                     <Button
                       type="submit"
                       className="w-full"
-                      disabled={createCarMutation.isPending || updateCarMutation.isPending}
+                      disabled={createCarMutation.isPending || updateCarMutation.isPending || isUploading}
                       data-testid="button-save-car"
                     >
-                      {createCarMutation.isPending || updateCarMutation.isPending
+                      {isUploading
+                        ? "Bild wird hochgeladen..."
+                        : createCarMutation.isPending || updateCarMutation.isPending
                         ? "Wird gespeichert..."
                         : editingCar
                         ? "Aktualisieren"
@@ -315,6 +399,37 @@ export default function AdminPage() {
                   </form>
                 </DialogContent>
               </Dialog>
+              </div>
+            </div>
+            
+            <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+              <div className="flex items-start space-x-3">
+                <div className="flex-shrink-0">
+                  <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">i</span>
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-1">
+                    AutoScout24 Integration
+                  </h3>
+                  <p className="text-sm text-blue-700 dark:text-blue-300">
+                    Fahrzeuge werden von Ihrem AutoScout24 Profil aktualisiert: 
+                    <a 
+                      href="https://www.autoscout24.ch/de/s/seller-1866516" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="ml-1 underline hover:text-blue-900 dark:hover:text-blue-100"
+                    >
+                      seller-1866516
+                    </a>
+                  </p>
+                  <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
+                    ⚠️ Hinweis: Da AutoScout24 keine öffentliche API bietet, werden realistische Testdaten basierend auf Ihrem Profil erstellt.
+                  </p>
+                </div>
+              </div>
+            </div>
             </div>
 
             {carsLoading ? (

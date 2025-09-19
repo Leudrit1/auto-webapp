@@ -14,11 +14,7 @@ export default function Footer() {
         <div className="grid md:grid-cols-4 gap-8">
           <div className="md:col-span-2">
             <div className="flex items-center space-x-2 mb-6">
-              <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                <Car className="text-primary-foreground text-xl" />
-              </div>
-              <span className="text-2xl font-bold text-foreground">RI automobile</span>
-              <span className="text-sm text-muted-foreground">gmbh</span>
+            <a href="/"><img src="/images/lastlogo.png" alt="AutoBala Logo" className="w-15 h-10" /></a>
             </div>
             <p className="text-muted-foreground mb-6 max-w-md">
               Ihr vertrauensvoller Partner für Premium-Fahrzeuge in der Schweiz.
