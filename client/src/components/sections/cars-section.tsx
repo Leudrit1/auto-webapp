@@ -70,10 +70,38 @@ export default function CarsSection() {
       console.log('AutoScout24 HCI script loaded successfully');
       console.log('Current domain:', window.location.hostname);
       console.log('Config ID:', '12980');
+      console.log('Script status: 304 (Not Modified) - This is normal');
+      
+      // Force widget initialization
+      const forceWidgetInit = () => {
+        console.log('Attempting to force widget initialization...');
+        
+        // Try to trigger the widget manually
+        const widgetContainer = document.querySelector('.hci-container');
+        if (widgetContainer) {
+          // Force re-render by changing attributes
+          widgetContainer.setAttribute('data-config-id', '12980');
+          widgetContainer.setAttribute('data-language', 'de');
+          widgetContainer.setAttribute('data-entry-point', 'search');
+          
+          // Try to trigger AutoScout24 HCI if it exists
+          if (window.AutoScout24 && window.AutoScout24.HCI) {
+            console.log('AutoScout24 HCI found, attempting to initialize...');
+            try {
+              window.AutoScout24.HCI.init();
+              console.log('✅ AutoScout24 HCI initialized successfully!');
+            } catch (error) {
+              console.log('❌ AutoScout24 HCI initialization failed:', error);
+            }
+          } else {
+            console.log('AutoScout24 HCI not found in window object');
+          }
+        }
+      };
       
       // Multiple checks for widget initialization
       let checkCount = 0;
-      const maxChecks = 10;
+      const maxChecks = 15;
       
       const checkWidget = () => {
         checkCount++;
@@ -85,10 +113,16 @@ export default function CarsSection() {
         const hasContent = widgetContainer && widgetContainer.children.length > 0;
         const hasIframe = widgetContainer && widgetContainer.querySelector('iframe');
         const hasAutoScoutElements = widgetContainer && widgetContainer.querySelector('[class*="autoscout"], [class*="hci"], [id*="autoscout"]');
+        const hasScripts = widgetContainer && widgetContainer.querySelector('script');
         
-        console.log(`Check ${checkCount}: hasContent:`, hasContent, 'hasIframe:', hasIframe, 'hasAutoScoutElements:', hasAutoScoutElements);
+        console.log(`Check ${checkCount}: hasContent:`, hasContent, 'hasIframe:', hasIframe, 'hasAutoScoutElements:', hasAutoScoutElements, 'hasScripts:', hasScripts);
         
-        if (hasContent || hasIframe || hasAutoScoutElements) {
+        // Try to force initialization every 3 checks
+        if (checkCount % 3 === 0) {
+          forceWidgetInit();
+        }
+        
+        if (hasContent || hasIframe || hasAutoScoutElements || hasScripts) {
           console.log('✅ AutoScout24 widget loaded successfully!');
           setWidgetError(false);
           return;
@@ -104,12 +138,13 @@ export default function CarsSection() {
           console.log('2. Domain not whitelisted by AutoScout24');
           console.log('3. AutoScout24 server issues');
           console.log('4. CORS or security restrictions');
+          console.log('5. Widget requires manual initialization');
           setWidgetError(true);
         }
       };
       
       // Start checking after a short delay
-      setTimeout(checkWidget, 2000);
+      setTimeout(checkWidget, 1000);
     };
     
     document.head.appendChild(script);
@@ -304,7 +339,7 @@ export default function CarsSection() {
                       <br />
                       <strong>Config ID:</strong> 12980
                       <br />
-                      <strong>Status:</strong> Script geladen, Widget initialisiert sich...
+                      <strong>Status:</strong> Script geladen (304), Widget initialisiert sich...
                       <br />
                       <strong>Debug:</strong> Öffnen Sie die Browser-Konsole für detaillierte Logs.
                       <br />
@@ -313,6 +348,7 @@ export default function CarsSection() {
                         <li>Config ID 12980 überprüfen</li>
                         <li>Domain bei AutoScout24 whitelisten lassen</li>
                         <li>AutoScout24 Support kontaktieren</li>
+                        <li>Manual Init Button verwenden</li>
                       </ul>
                     </div>
                   </div>
@@ -385,6 +421,39 @@ export default function CarsSection() {
                     }}
                   >
                     Test Config ID
+                  </Button>
+                  
+                  <Button 
+                    variant="secondary"
+                    onClick={() => {
+                      console.log('Attempting manual widget initialization...');
+                      
+                      // Check if AutoScout24 HCI exists
+                      if (window.AutoScout24 && window.AutoScout24.HCI) {
+                        console.log('AutoScout24 HCI found, attempting manual init...');
+                        try {
+                          window.AutoScout24.HCI.init();
+                          console.log('✅ Manual initialization successful!');
+                        } catch (error) {
+                          console.log('❌ Manual initialization failed:', error);
+                        }
+                      } else {
+                        console.log('AutoScout24 HCI not found in window object');
+                        console.log('Available window properties:', Object.keys(window).filter(key => key.toLowerCase().includes('autoscout')));
+                      }
+                      
+                      // Force re-render
+                      const container = document.querySelector('.hci-container');
+                      if (container) {
+                        container.innerHTML = '';
+                        container.setAttribute('data-config-id', '12980');
+                        container.setAttribute('data-language', 'de');
+                        container.setAttribute('data-entry-point', 'search');
+                        console.log('Container reset and attributes updated');
+                      }
+                    }}
+                  >
+                    Manual Init
                   </Button>
                 </div>
               </div>
